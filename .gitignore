@@ -1,2 +1,7 @@
+#package-lock file and node modules
+package-lock.json
+node_modules/
+
+
 # Images
 *.png
