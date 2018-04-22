@@ -1,10 +1,10 @@
 // Our pathfinding algorithm is based on Djikstra's weighted shortest path algorithm.
+// We'll be using the classic version of the algorithm rather than the one using priority queues.
+// Our graphs are relatively simple and this shouldn't have too much of an effect on processing
+// times.
 
 // a queue of all the nodes in the graph. probably objects with coordinates.
 var unvisited = [];
-
-// a set of already visited nodes.
-var visited = {};
 
 // distances from nodes to the end node are stored here.
 // These are in form:
@@ -36,15 +36,12 @@ function Dijkstra(graph, startPoint, endPoint) {
     // set all distances to infinity in the beginning.
     for (node in graph) {
         previous[node] = undefined;
-        distance[node] = Infinity;
+        distance[node] = Number.MAX_VALUE;
     }
     // set distance of starting point to 0.
     distance[startPoint] = 0;
 
-    // set visited nodes empty
-    visited = []
-
-    // while Q is non-empty
+    // while unvisited is non-empty
     while (unvisited.length) {
         // select the node with the least distance to be handled next.
         let curNode = minDist(distance);
@@ -53,7 +50,8 @@ function Dijkstra(graph, startPoint, endPoint) {
 
         // CHECK IF WE ARE ALREADY AT THE END
         if (curNode === endPoint) {
-
+            // break out of while?
+            // doublecheck logic for this. if true, just do the following for if !=.
         }
 
         for (neighbour in graph[node]) {
@@ -64,18 +62,37 @@ function Dijkstra(graph, startPoint, endPoint) {
             }
         }
     }
-    console.log("Dijkstra algorithm completed. Distance and previous data structures updated.")
+    console.log("Dijkstra algorithm completed. Distance[] and previous[] data structures updated.")
 }
 
-// returns
+// Returns the closest path from startPoint to endPoint.
+// Assumes that previous[] is set by the Dijkstra algorithm for the current points.
+function getPath() {
+    let path = [];
+    curNode = endPoint;
+    while (curNode != startPoint) {
+        // add current node as the first element of the path.
+        path.unshift(curNode);
+        curNode = previous[curNode];
+    }
+    path.unshift(curNode);
+    return path;
+}
+
+// returns reference to the node with the current minimum distance.
 function minDist(dist) {
-    let minDist = Infinity;
+    let minDist = Number.MAX_VALUE;
     let minDistNode = '';
     for (node in dist) {
-        if (dist[node] < minDist) {
+        if (dist[node] < minDist && unvisited.indexOf(node) > -1) {
             minDist = dist[node];
             minDistNode = node;
         }
     }
     return minDistNode;
+}
+
+// constructs unvisited[] and graph{}
+function buildGraph() {
+
 }
