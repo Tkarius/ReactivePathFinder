@@ -47,3 +47,44 @@
 .obstacle {
   background-color: black; 
 }
+
+#board {
+  float: left;
+  margin: 2em 3em 2em 3em;
+}
+
+#sideMenu {
+  float: left;
+  background-color: lightblue;
+  border-radius: 3px;
+  margin-top: 2em;
+  padding: 8px;
+  min-width: 250px;
+}
+
+.blockTable {
+  width: 100%;
+}
+
+.chooseButton {
+  background-color: teal;
+  color: white;
+  border-radius: 3px;
+  padding: 3px;
+}
+
+.chooseButton:hover {
+  background-color: lightseagreen;
+}
+
+.chooseButtonCell{
+  float:right;
+}
+
+.endBlock{
+  background-color: limegreen;
+}
+
+.startBlock{
+  background-color: yellow;
+}
