@@ -22,7 +22,7 @@ $(function() {
       else if (blockType === "Obstacle") {
         renderObstacles(blockSizeX, blockSizeY, boxCoordinateX, boxCoordinateY);
       }
-      $(this).toggleClass(blockClass);
+      $(this).addClass(blockClass);
       //reduceAvailableAmount(blockName);
     });
 
@@ -54,7 +54,7 @@ function makeObstacle(coordinateY, coordinateX){
   console.log("Making obstacle!")
   var yClass = ".y" + coordinateY;
   var xClass = ".x" + coordinateX;
-  $(yClass).children().children(xClass).toggleClass("obstacle");
+  $(yClass).children().children(xClass).addClass("obstacle");
   console.log($(yClass).children(xClass));
 }
 
