@@ -14,7 +14,7 @@ const rows = yAxis.map((row) =>
 class Rows extends Component {
     render() {
         return(
-            <div className="container">
+            <div id="board">
                 {rows}
             </div>
         );
