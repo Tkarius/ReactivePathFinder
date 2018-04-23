@@ -26,7 +26,7 @@ class Block extends Component {
                     <tr>
                         <td>SizeX: </td>
                         <td>{sizeX}</td>
-                        <td rowSpan="3" className="chooseButtonCell"><p className="chooseButton" id={name} data={type} sizey={sizeY} sizex={sizeX}>Choose!</p></td>
+                        <td rowSpan="3" className="chooseButtonCell"><p className="chooseButton button" id={name} data={type} sizey={sizeY} sizex={sizeX}>Choose!</p></td>
                     </tr>
                     {/**<tr>
                         <td>Available: </td>
