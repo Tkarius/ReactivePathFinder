@@ -5,24 +5,11 @@ import Rows from './Rows';
 import SideMenu from './SideMenu'
 
 
-
-const yAxis = ["y1", "y2", "y3", "y4", "y5"];
-const xAxis = ["x1", "x2", "x3", "x4", "x5"];
-
 /*
-const rows = yAxis.map((row) =>
-  <div key={row.toString()} className={"boxrow " + row.toString()} >
-    x
-    {boxes}
-  </div>
-);
-
-const boxes = xAxis.map((box) =>
-  <div key={box.toString()} className={"box " + box.toString()}>
-    {box}
-  </div>
-);
+* We need to ask the board dimensions from the user and then populate the arrays. These are only for testing
 */
+const yAxis = ["y1", "y2", "y3", "y4", "y5", "y6", "y7", "y8", "y9", "y10"];
+const xAxis = ["x1", "x2", "x3", "x4", "x5", "x6", "x7", "x8", "x9", "x10"];
 
 class App extends Component {
   render() {
@@ -35,12 +22,13 @@ class App extends Component {
         <p className="App-intro">
 
         </p>
-          <Rows />
-          <SideMenu />
+        <div id ="showRouteDiv"><p className="button" id="showRoute">Calculate route!</p></div>
+        <Rows yAxis = {yAxis} xAxis = {xAxis}/>
+        <SideMenu />
       </div>
     );
   }
 }
 
-export default App; 
-export {yAxis};
+export default App;
+export { yAxis };
