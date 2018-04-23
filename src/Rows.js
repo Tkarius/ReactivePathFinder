@@ -1,24 +1,22 @@
 import React, { Component } from 'react';
 import Boxes from './Boxes';
-/*
-import {yAxis} from './App'; 
-*/
-const yAxis = ["y1", "y2", "y3", "y4", "y5", "y6", "y7", "y8", "y9", "y10"];
-
-const rows = yAxis.map((row) =>
-    <div key={row.toString()} className={"boxrow " + row.toString()} >
-        <Boxes />
-    </div>
-);
-
 class Rows extends Component {
     render() {
-        return(
-            <div id="board">
+        var yAxis = this.props.yAxis;
+        var xAxis = this.props.xAxis;
+
+        const rows = yAxis.map((row) =>
+            <div key={row.toString()} className={"boxrow " + row.toString()} >
+                <Boxes xAxis = {xAxis}/>
+            </div>
+        );
+        console.log(yAxis.length);
+        return (
+            <div id="board" yaxislength={yAxis.length} xaxislength={xAxis.length}>
                 {rows}
             </div>
         );
-    } 
+    }
 
 }
 
