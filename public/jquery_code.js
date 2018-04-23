@@ -2,6 +2,9 @@ $(function () {
   var startSet = false;
   var endSet = false;
 
+  var startCoordinate = "";
+  var endCoordinate = "";
+
   const boardXaxisLength = $('#board').attr('xaxislength');
   const boardYaxisLength = $('#board').attr('yaxislength');
 
@@ -28,10 +31,12 @@ $(function () {
     var boxCoordinateY = $(this).parent().parent().attr("class").split(" ")[1].substring(1);
     console.log("Box coordinate X: " + boxCoordinateX + " Y: " + boxCoordinateY);
     if (blockType === "Start" && startSet === false) {
+      startCoordinate = `x${boxCoordinateX}y${boxCoordinateY}`;
       blockClass = "startBlock";
       startSet = true;
     }
     else if (blockType === "End" && endSet === false) {
+      endCoordinate = `x${boxCoordinateX}y${boxCoordinateY}`;
       blockClass = "endBlock";
       endSet = true;
     }
