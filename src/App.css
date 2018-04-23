@@ -66,14 +66,14 @@
   width: 100%;
 }
 
-.chooseButton {
+.button {
   background-color: teal;
   color: white;
   border-radius: 3px;
   padding: 3px;
 }
 
-.chooseButton:hover {
+.button:hover {
   background-color: lightseagreen;
 }
 
@@ -88,3 +88,16 @@
 .startBlock{
   background-color: yellow;
 }
+
+#showRoute {
+  padding: 10px;
+}
+
+#showRouteDiv{
+  text-align: center;
+  width: 12em;
+  height: 3em;
+  margin-top: 2em;
+  margin-left: 3em;
+}
+
