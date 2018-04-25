@@ -7,7 +7,7 @@ class Rows extends Component {
 
         const rows = yAxis.map((row) =>
             <div key={row.toString()} className={"boxrow " + row.toString()} >
-                <Boxes xAxis = {xAxis}/>
+                <Boxes xAxis = {xAxis} yAxis = {row.toString()}/>
             </div>
         );
         console.log(yAxis.length);
