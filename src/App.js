@@ -25,6 +25,7 @@ class App extends Component {
         <div id ="showRouteDiv"><p className="button" id="showRoute">Calculate route!</p></div>
         <Rows yAxis = {yAxis} xAxis = {xAxis}/>
         <SideMenu />
+        <Form />
       </div>
     );
   }
