@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
 import Rows from './Rows';
-import SideMenu from './SideMenu'
+import SideMenu from './SideMenu';
+import Form from './Form';
 
 
 /*

@@ -30,28 +30,30 @@ class Form extends React.Component {
 
     render() {
       return (
-        //HTML for the form
-        <form onSubmit={this.handleSubmit}>
-          <label>
-            X-Axis:
-            <input
-              name="xAxis"
-              type="number"
-              value={this.state.xAxis}
-              onChange={this.handleInputChange} />
-          </label>
-          <br />
-          <label>
-            Y-Axis:
-            <input
-              name="yAxis"
-              type="number"
-              value={this.state.yAxis}
-              onChange={this.handleInputChange} />
-          </label>
-          <br />
-          <input type="submit" value="Submit" />
-        </form>
+        <div id="form">
+          //HTML for the form
+          <form onSubmit={this.handleSubmit}>
+            <label>
+              X-Axis:
+              <input
+               name="xAxis"
+                type="number"
+               value={this.state.xAxis}
+               onChange={this.handleInputChange} />
+           </label>
+           <br />
+           <label>
+             Y-Axis:
+             <input
+               name="yAxis"
+               type="number"
+                value={this.state.yAxis}
+                onChange={this.handleInputChange} />
+           </label>
+           <br />
+           <input type="submit" value="Submit" />
+          </form>
+        </div>
       );
     }
   }
