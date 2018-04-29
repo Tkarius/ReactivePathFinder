@@ -92,8 +92,8 @@ $(function () {
       var path = buildPath(coordinates, coordinateNeighbors, startCoordinate, endCoordinate);
       console.log(path);
       for (var i = 1; i < oldPath.length - 1; i++) {
-		if ($(this).hasClass('path')) {
-			var coordinateID = "#" + oldPath[i];
+		var coordinateID = "#" + oldPath[i];
+		if ($(coordinateID).hasClass('path')) {
         	$(coordinateID).children('img').remove();
         	$(coordinateID).removeClass('path');
 		};
