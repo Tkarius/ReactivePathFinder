@@ -38,7 +38,7 @@ class App extends Component {
     loadjs('./jquery_code.js');
   }
   updateAxis = (newYAxis, newXAxis) => {
-    createArrays(newXAxis, newXAxis);
+    createArrays(newYAxis, newXAxis);
     this.setState({'xAxis': newXAxis});
     this.setState({'yAxis': newYAxis});
     loadjs('./jquery_code.js');

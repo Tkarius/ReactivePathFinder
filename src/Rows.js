@@ -6,11 +6,11 @@ class Rows extends Component {
         var xAxis = this.props.xAxis;
 
         const rows = yAxis.map((row) =>
-            <div key={row.toString()} className={"boxrow " + row.toString()} >
+            <div key={row.toString()} className={"row " + row.toString()} >
                 <Boxes xAxis = {xAxis} yAxis = {row.toString()}/>
             </div>
         );
-        console.log(yAxis.length);
+        console.log("Axis lenghts X * y: "+ xAxis.length + yAxis.length);
         return (
             <div id="board" yaxislength={yAxis.length} xaxislength={xAxis.length}>
                 {rows}

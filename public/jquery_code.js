@@ -19,14 +19,14 @@ var pathMarker = 'path.png';
 
 
 console.log(`Board dimensions: ${boardXaxisLength} x ${boardYaxisLength}`);
-//array of coordinates in form of coordinates = [x1y1, x2y1...]
-var coordinates = getAllBoxCoordinates(boardXaxisLength, boardYaxisLength);
+//array of coordinates in form of coordinates = [x1_y1, x2_y1...]
+var coordinates;
 
-/*object of coordinates and their valid neighbors in form of {x1y1: {x2y1, x1y2...}...}
+/*object of coordinates and their valid neighbors in form of {x1_y1: {x2_y1, x1_y2...}...}
 * only valid neighbors are listed and as obstacles are added to the board the invalid coordinates
 * are removed.
 */
-var coordinateNeighbors = getAllBoxCoordinatesWNeighbors(boardXaxisLength, boardYaxisLength);;
+var coordinateNeighbors;
 
 //Information about the currently active block mode. We might want to encapsulate these to an object
 var blockName = "";
@@ -38,7 +38,8 @@ var oldPath = [];
 
 $(function () {
   console.log("here again!")
-  $(".box").bind("click", function (event) {
+  initializeBoard(); // this is used to empty the board after board dimensions have been reset.
+  $(".box").unbind('click').click(function (event) {
     console.log("Status: end: " + endSet + " start: " + startSet)
     var blockClass = "";
     var boxCoordinateX = $(this).attr("id").split("_")[0].substring(1);
@@ -48,6 +49,7 @@ $(function () {
     if (blockType === "Start") {
       if (!startSet) {
         startCoordinate = `x${boxCoordinateX}_y${boxCoordinateY}`;
+        $(fullCoordinateID).children('img').remove();
         $(fullCoordinateID).append(`<img class="blockImage" src="${imageRootPath}${startImage}" />`);
         $(this).addClass("startBlock");
         startSet = true;
@@ -61,6 +63,7 @@ $(function () {
     else if (blockType === "End") {
       if (!endSet) {
         endCoordinate = `x${boxCoordinateX}_y${boxCoordinateY}`;
+        $(fullCoordinateID).children('img').remove();
         $(fullCoordinateID).append(`<img class="blockImage" src="${imageRootPath}${endImage}" />`);
         $(this).addClass("endBlock");
         endSet = true;
@@ -90,7 +93,6 @@ $(function () {
       	console.log(path);
 	  	for (var i = 0; i < oldPath.length; i++) {
 			var coordinateID = "#" + oldPath[i];
-			console.log('moi hoi');
 	  		$(coordinateID).children('img').remove();
 	  	};
       for (var i = 0; i < path.length; i++) {
@@ -112,8 +114,7 @@ function renderObstaclesAndHindrances(blockType, blockSizeX, blockSizeY, boxCoor
       if (checkBoxClass(i, j) !== 'startBlock' && checkBoxClass(i, j) != 'endBlock') {
         var fullCoordinateID = `#x${newCoordinateX}_y${newCoordinateY}`;
         if ($(fullCoordinateID).children().length != 0) {
-          cleanBox(fullCoordinateID);
-          
+          cleanBox(fullCoordinateID);        
         }
         if (blockType === "Obstacle") {
           makeObstacle(newCoordinateY, newCoordinateX, coordinateNeighbors, coordinates);
@@ -170,7 +171,7 @@ function getAllBoxCoordinates(boardXaxisLength, boardYaxisLength) {
       var boxClass = checkBoxClass(i, j);
       if (boxClass != "obstacle") {
         let coordinate = `x${i}_y${j}`;
-        if (boxClass === 'startBlock') {
+        if (boxClass === 'startBlock') { //if we do not empty the board at dimension reset we need to find placed start/end blocks
           console.log("Start block found at: " + coordinate);
           startSet = true;
           startCoordinate = coordinate;
@@ -189,12 +190,8 @@ function getAllBoxCoordinates(boardXaxisLength, boardYaxisLength) {
 
 /**
  * Finds all neighbors for a given coordinate and returns an object of valid neighbors. This method
- * is called at board initialization and assumes all cells that are within board boundaris are valid.
+ * is called at board initialization and assumes all cells that are within board boundaries are valid.
  * 
- * @param {*} x 
- * @param {*} y 
- * @param {*} boardXaxisLength 
- * @param {*} boardYaxisLength 
  */
 function getCoordinateNeighbors(x, y, boardXaxisLength, boardYaxisLength) {
   var neighbors = {};
@@ -236,8 +233,6 @@ function modifyDistanceForNeighbors(hindranceCoordinate, coordinateNeighbors) {
 /**
  * Removes the obstacle coordinate from coordinate neighbors list as well as removes the
  * obstacle coordinate from valid neighbors from other coordinates.
- * @param {*} obstacleCoordinate 
- * @param {*} coordinateNeighbors 
  */
 function removeFromValidNeigbors(obstacleCoordinate, coordinateNeighbors) {
   delete coordinateNeighbors[obstacleCoordinate];
@@ -252,7 +247,6 @@ function removeFromValidNeigbors(obstacleCoordinate, coordinateNeighbors) {
 function removeFromCoordinateList(coordinateToRemove, coordinates) {
   var index = coordinates.indexOf(coordinateToRemove);
   if (index !== -1) {
-    console.log("removing coordinate from list index: " + index);
     coordinates.splice(index, 1);
   }
   return coordinates;
@@ -266,4 +260,15 @@ function checkBoxClass(coordinateX, coordinateY) {
     return classes[1];
   }
   return " ";
+}
+
+function initializeBoard(){
+  $('.box').children('img').remove();
+  $('.box').removeClass('path obstacle startBlock endBlock hindrance');
+  startSet = false;
+  endSet = false;
+  startCoordinate = "";
+  endCoordinate = "";
+  coordinates = getAllBoxCoordinates(boardXaxisLength, boardYaxisLength);
+  coordinateNeighbors = getAllBoxCoordinatesWNeighbors(boardXaxisLength, boardYaxisLength);
 }
