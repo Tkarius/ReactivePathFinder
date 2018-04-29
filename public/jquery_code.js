@@ -66,8 +66,11 @@ $(function () {
   });
 
   $("#showRoute").click(function (event) {
-    //pass the needed parameters to algorithm and calculate route.
-    console.log("Calculating route!")
+    if (startSet && endSet) {
+      var path = getPath(coordinates, coordinateNeighbors, startPoint, endPoint);
+      console.log("Calculating route!")
+      console.log(path);
+    }
   });
 });
 
@@ -94,7 +97,7 @@ function makeObstacle(coordinateY, coordinateX, coordinateNeighbors, coordinates
   var coordinate = `x${coordinateX}y${coordinateY}`;
   var fullCoordinateID = `#x${coordinateX}_y${coordinateY}`
   $(fullCoordinateID).addClass("obstacle");
-  $(fullCoordinateID).append(`<img class="blockImage" src="${imageRootPath}${obstacleImages[Math.floor(Math.random()*obstacleImages.length)]}" />`)
+  $(fullCoordinateID).append(`<img class="blockImage" src="${imageRootPath}${obstacleImages[Math.floor(Math.random() * obstacleImages.length)]}" />`)
   removeFromValidNeigbors(coordinate, coordinateNeighbors);
   removeFromCoordinateList(coordinate, coordinates);
 }
@@ -103,8 +106,8 @@ function makeHindrance(coordinateY, coordinateX, coordinateNeighbors, coordinate
   var coordinate = `x${coordinateX}y${coordinateY}`;
   var fullCoordinateID = `#x${coordinateX}_y${coordinateY}`
   modifyDistanceForNeighbors(coordinate, coordinateNeighbors);
-  $(fullCoordinateID).append(`<img class="blockImage" src="${imageRootPath}${hindranceImages[Math.floor(Math.random()*hindranceImages.length)]}" />`)
-  console.log("Making hindrance!" + hindranceImages[Math.floor(Math.random()*hindranceImages.length)])
+  $(fullCoordinateID).append(`<img class="blockImage" src="${imageRootPath}${hindranceImages[Math.floor(Math.random() * hindranceImages.length)]}" />`)
+  console.log("Making hindrance!" + hindranceImages[Math.floor(Math.random() * hindranceImages.length)])
   $(fullCoordinateID).addClass("hindrance");
 }
 
