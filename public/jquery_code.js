@@ -87,20 +87,21 @@ $(function () {
   });
 
   $("#showRoute").click(function () {
-      if (startSet && endSet) {	
-		console.log("Calculating route!")
-      	var path = buildPath(coordinates, coordinateNeighbors, startCoordinate, endCoordinate);
-      	console.log(path);
-	  	for (var i = 1; i < oldPath.length-1; i++) {
-			var coordinateID = "#" + oldPath[i];
-	  		$(coordinateID).children('img').remove();
-	  	};
+    if (startSet && endSet) {
+      console.log("Calculating route!")
+      var path = buildPath(coordinates, coordinateNeighbors, startCoordinate, endCoordinate);
+      console.log(path);
+      for (var i = 1; i < oldPath.length - 1; i++) {
+        var coordinateID = "#" + oldPath[i];
+        $(coordinateID).children('img').remove();
+        $(coordinateID).removeClass('path');
+      };
       for (var i = 0; i < path.length; i++) {
         var coordinateID = "#" + path[i];
         if (path[i] !== startCoordinate && path[i] !== endCoordinate) {
           $(coordinateID).addClass("path");
           $(coordinateID).append(`<img class="blockImage" src="${imageRootPath}${pathMarker}" />`);
-		  oldPath = path;
+          oldPath = path;
         }
       }
     }
@@ -217,9 +218,7 @@ function cleanBox(fullCoordinateID) {
   $(`${fullCoordinateID}.obstacle`).children().remove();
   $(`${fullCoordinateID}.path`).children().remove();
   $(`${fullCoordinateID}.hindrance`).children().remove();
-  $(`${fullCoordinateID}`).removeClass('obstacle');
-  $(`${fullCoordinateID}`).removeClass('path');
-  $(`${fullCoordinateID}`).removeClass('hindrance');
+  $(`${fullCoordinateID}`).removeClass('obstacle path hindrance');
 }
 
 function modifyDistanceForNeighbors(hindranceCoordinate, coordinateNeighbors) {
