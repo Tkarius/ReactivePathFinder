@@ -42,7 +42,7 @@ $(function () {
     console.log("Clicked on board! " + fullCoordinateID);
     if (blockType === "Start" && startSet === false) {
       if ($(fullCoordinateID).children().length === 0) {
-        startCoordinate = `x${boxCoordinateX}y${boxCoordinateY}`;
+        startCoordinate = `x${boxCoordinateX}_y${boxCoordinateY}`;
 
         $(fullCoordinateID).append(`<img class="blockImage" src="${imageRootPath}${startImage}" />`);
         blockClass = "startBlock";
@@ -51,7 +51,7 @@ $(function () {
     }
     else if (blockType === "End" && endSet === false) {
       if ($(fullCoordinateID).children().length === 0) {
-        endCoordinate = `x${boxCoordinateX}y${boxCoordinateY}`;
+        endCoordinate = `x${boxCoordinateX}_y${boxCoordinateY}`;
         $(fullCoordinateID).append(`<img class="blockImage" src="${imageRootPath}${endImage}" />`);
         blockClass = "endBlock";
         endSet = true;
@@ -101,7 +101,7 @@ function renderObstaclesAndHindrances(blockType, blockSizeX, blockSizeY, boxCoor
 }
 
 function makeObstacle(coordinateY, coordinateX, coordinateNeighbors, coordinates) {
-  var coordinate = `x${coordinateX}y${coordinateY}`;
+  var coordinate = `x${coordinateX}_y${coordinateY}`;
   var fullCoordinateID = `#x${coordinateX}_y${coordinateY}`;
   $(fullCoordinateID).addClass("obstacle");
   $(fullCoordinateID).append(`<img class="blockImage" src="${imageRootPath}${obstacleImages[Math.floor(Math.random() * obstacleImages.length)]}" alt="obstacle"/>`)
@@ -111,7 +111,7 @@ function makeObstacle(coordinateY, coordinateX, coordinateNeighbors, coordinates
 }
 
 function makeHindrance(coordinateY, coordinateX, coordinateNeighbors, coordinates) {
-  var coordinate = `x${coordinateX}y${coordinateY}`;
+  var coordinate = `x${coordinateX}_y${coordinateY}`;
   var fullCoordinateID = `#x${coordinateX}_y${coordinateY}`
   modifyDistanceForNeighbors(coordinate, coordinateNeighbors);
   $(fullCoordinateID).append(`<img class="blockImage" src="${imageRootPath}${hindranceImages[Math.floor(Math.random() * hindranceImages.length)]}" />`)
@@ -125,7 +125,7 @@ function getAllBoxCoordinatesWNeighbors(boardXaxisLength, boardYaxisLength) {
   for (var i = 1; i <= boardXaxisLength; i++) {
     for (var j = 1; j <= boardYaxisLength; j++) {
       if (checkBoxClass(i, j) != "obstacle") {
-        let coordinate = `x${i}y${j}`;
+        let coordinate = `x${i}_y${j}`;
         let coordinateNeighbors = getCoordinateNeighbors(i, j, boardXaxisLength, boardYaxisLength);
         coordinates[coordinate] = coordinateNeighbors;
       }
@@ -140,7 +140,7 @@ function getAllBoxCoordinates(boardXaxisLength, boardYaxisLength) {
     for (var j = 1; j <= boardYaxisLength; j++) {
       var boxClass = checkBoxClass(i, j);
       if (boxClass != "obstacle") {
-        let coordinate = `x${i}y${j}`;
+        let coordinate = `x${i}_y${j}`;
         if (boxClass === 'startBlock') {
           console.log("Start block found at: " + coordinate);
           startSet = true;
@@ -174,7 +174,7 @@ function getCoordinateNeighbors(x, y, boardXaxisLength, boardYaxisLength) {
       if ((i !== x || j !== y) && (i === x || j === y)) { //we need to both prevent the cell from being marked as it's own neighbor as well as prevent moving from corner to corner
         var boxClass = checkBoxClass(i, j);
         if (boxClass != "obstacle") {
-          var coordinate = `x${i}y${j}`;
+          var coordinate = `x${i}_y${j}`;
           var weight = 1;
           if (boxClass === 'hindrance') {
             weight = 1.5;
@@ -214,6 +214,7 @@ function removeFromValidNeigbors(obstacleCoordinate, coordinateNeighbors) {
 function removeFromCoordinateList(coordinateToRemove, coordinates) {
   var index = coordinates.indexOf(coordinateToRemove);
   if (index !== -1) {
+    console.log("removing coordinate from list index: " + index);
     coordinates.splice(index, 1);
   }
   return coordinates;
