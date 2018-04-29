@@ -34,13 +34,7 @@ var endPoint = '';
 var path = [];
 
 // we assume that graph has been built and that start- and endpoints have their values set.
-function dijkstra() {
-    console.log("Data structures inside the algorithm: ");
-    console.log(JSON.stringify(unvisited));
-    //console.log(JSON.stringify(graph))
-    console.log(startPoint);
-    console.log(endPoint);
-    
+function dijkstra() {   
     // set all distances to infinity in the beginning.
     for (node in graph) {
         previous[node] = undefined;
@@ -56,7 +50,8 @@ function dijkstra() {
         // remove current node from unvisited
         unvisited.splice(unvisited.indexOf(curNode), 1);
 
-        // CHECK IF WE ARE ALREADY AT THE END
+        // if we are at the end node, we already have enough for one optimal route.
+        // as we only need one route with the shortest possible distance, we'll accept this.
         if (curNode === endPoint) {
             unvisited = [];
         }
@@ -70,8 +65,6 @@ function dijkstra() {
             }
         }
     }
-    //console.log("Debug: previous: " + JSON.stringify(previous));
-    //console.log("Debug: distance: " + JSON.stringify(distance));
     console.log("Dijkstra algorithm completed. Distance[] and previous[] data structures updated.")
 }
 
@@ -86,6 +79,7 @@ function getPath() {
         curNode = previous[curNode];
     }
     path.unshift(curNode);
+    console.log("Optimal distance path built.")
     return path;
 }
 
@@ -104,6 +98,7 @@ function minDist(dist) {
 
 // driver function for the algorithm.
 function buildPath(requestedNodes, requestedGraph, requestedStartPoint, requestedEndPoint) {
+    // Let's copy elements from the parameter so we don't mess up the original array
     unvisited = []
     for (index in requestedNodes) {
         unvisited[index] = requestedNodes[index];
@@ -113,13 +108,10 @@ function buildPath(requestedNodes, requestedGraph, requestedStartPoint, requeste
     endPoint = requestedEndPoint;
     distance = {};
     previous = {};
-
-
-    //console.log("buildpath Graafi: " + JSON.stringify(graph));
     console.log("buildpath Nodet: " + JSON.stringify(requestedNodes));
-    console.log("Start point: " + startPoint);
-    console.log("End point: " + endPoint);
+    // call dijkstra algorithm to build the distance mapping
     dijkstra();
+    // call getPath() to build the optimal path and return it as an array
     let shortestPath = getPath();
     console.log("Resulting path: " + JSON.stringify(shortestPath));
     return shortestPath;
