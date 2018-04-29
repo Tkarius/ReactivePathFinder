@@ -88,6 +88,7 @@ $(function () {
     if (startSet && endSet) {
       console.log("Calculating route!")
       var path = buildPath(coordinates, coordinateNeighbors, startCoordinate, endCoordinate);
+      console.log(path);
       for (var i = 0; i < path.length; i++) {
         var coordinateID = "#" + path[i];
         if (path[i] !== startCoordinate && path[i] !== endCoordinate) {
