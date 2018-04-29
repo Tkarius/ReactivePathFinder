@@ -92,9 +92,11 @@ $(function () {
       var path = buildPath(coordinates, coordinateNeighbors, startCoordinate, endCoordinate);
       console.log(path);
       for (var i = 1; i < oldPath.length - 1; i++) {
-        var coordinateID = "#" + oldPath[i];
-        $(coordinateID).children('img').remove();
-        $(coordinateID).removeClass('path');
+		if ($(this).hasClass('path')) {
+			var coordinateID = "#" + oldPath[i];
+        	$(coordinateID).children('img').remove();
+        	$(coordinateID).removeClass('path');
+		};
       };
       for (var i = 0; i < path.length; i++) {
         var coordinateID = "#" + path[i];
