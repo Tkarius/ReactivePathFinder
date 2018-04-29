@@ -87,22 +87,22 @@ $(function () {
   });
 
   $("#showRoute").click(function () {
-    if (startSet && endSet) {
-      console.log("Calculating route!")
-      var path = buildPath(coordinates, coordinateNeighbors, startCoordinate, endCoordinate);
-      console.log(path);
-      for (var i = 0; i < oldPath.length; i++) {
-        var coordinateID = "#" + oldPath[i];
-        $(coordinateID).children('img').remove();
-      };
+      if (startSet && endSet) {	
+		console.log("Calculating route!")
+      	var path = buildPath(coordinates, coordinateNeighbors, startCoordinate, endCoordinate);
+      	console.log(path);
+	  	for (var i = 1; i < oldPath.length-1; i++) {
+			var coordinateID = "#" + oldPath[i];
+	  		$(coordinateID).children('img').remove();
+	  	};
       for (var i = 0; i < path.length; i++) {
         var coordinateID = "#" + path[i];
         if (path[i] !== startCoordinate && path[i] !== endCoordinate) {
           $(coordinateID).addClass("path");
           $(coordinateID).append(`<img class="blockImage" src="${imageRootPath}${pathMarker}" />`);
+		  oldPath = path;
         }
       }
-      oldPath = path;
     }
   });
 });
