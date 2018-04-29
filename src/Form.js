@@ -5,12 +5,22 @@ class Form extends React.Component {
       super(props);
       this.state = {
         xAxis: 10,
-        yAxis: 10
+        yAxis: 10,
+		formValid: true
       };
   
       this.handleInputChange = this.handleInputChange.bind(this);
       this.handleSubmit = this.handleSubmit.bind(this);
+	  this.validateForm = this.validateForm.bind(this);
     }
+	
+	//Function for form validation
+	validateForm(fieldName, value) {
+		const valid = value > 0;
+		this.setState({formValid: valid});
+	}
+	
+	
     //Changes the value in the input
     handleInputChange(event) {
       const target = event.target;
@@ -20,18 +30,20 @@ class Form extends React.Component {
       this.setState({
         [name]: value
       });
+	  //Disables sumbit button when condition is not met
+	  this.validateForm(target.name, target.value);
     }
     
     //Function for handling the form sumbit
     handleSubmit(event) {
       alert('X-Axis: ' + this.state.xAxis + ', Y-Axis: ' + this.state.yAxis);
+	  console.log(this.state.formValid)
       event.preventDefault();
     }
 
     render() {
       return (
         <div id="form">
-          //HTML for the form
           <form onSubmit={this.handleSubmit}>
             <label>
               X-Axis:
@@ -51,7 +63,7 @@ class Form extends React.Component {
                 onChange={this.handleInputChange} />
            </label>
            <br />
-           <input type="submit" value="Submit" />
+           <input type="submit" value="Submit" disabled={!this.state.formValid}/>
           </form>
         </div>
       );
