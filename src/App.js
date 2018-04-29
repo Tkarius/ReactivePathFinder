@@ -35,7 +35,6 @@ class App extends Component {
     };
   };
   componentWillMount(){
-    console.log("re-doing this shit!");
     loadjs('./jquery_code.js');
   }
   updateAxis = (newYAxis, newXAxis) => {
