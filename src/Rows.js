@@ -10,7 +10,7 @@ class Rows extends Component {
                 <Boxes xAxis = {xAxis} yAxis = {row.toString()}/>
             </div>
         );
-        console.log(yAxis.length);
+        console.log("Axis lenghts X * y: "+ xAxis.length + yAxis.length);
         return (
             <div id="board" yaxislength={yAxis.length} xaxislength={xAxis.length}>
                 {rows}
