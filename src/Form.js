@@ -16,7 +16,7 @@ class Form extends React.Component {
 	
 	//Function for form validation
 	validateForm(fieldName, value) {
-		const valid = value > 0;
+		const valid = value > 1;
 		this.setState({formValid: valid});
 	}
 	

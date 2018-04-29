@@ -34,6 +34,8 @@ var blockType = "";
 var blockSizeX = 0;
 var blockSizeY = 0;
 
+var oldPath = [];
+
 $(function () {
   console.log("here again!")
   initializeBoard(); // this is used to empty the board after board dimensions have been reset.
@@ -51,7 +53,7 @@ $(function () {
         $(fullCoordinateID).append(`<img class="blockImage" src="${imageRootPath}${startImage}" />`);
         $(this).addClass("startBlock");
         startSet = true;
-      } else if (startSet && `x${boxCoordinateX}_y${boxCoordinateY}` === startCoordinate){
+      } else if (startSet && `x${boxCoordinateX}_y${boxCoordinateY}` === startCoordinate) {
         $(fullCoordinateID).removeClass(`startBlock`);
         $(fullCoordinateID).children('img').remove();
         startSet = false;
@@ -65,7 +67,7 @@ $(function () {
         $(fullCoordinateID).append(`<img class="blockImage" src="${imageRootPath}${endImage}" />`);
         $(this).addClass("endBlock");
         endSet = true;
-      } else if (endSet && `x${boxCoordinateX}_y${boxCoordinateY}` === endCoordinate){
+      } else if (endSet && `x${boxCoordinateX}_y${boxCoordinateY}` === endCoordinate) {
         $(fullCoordinateID).removeClass(`endBlock`);
         $(fullCoordinateID).children('img').remove();
         endSet = false;
@@ -89,6 +91,10 @@ $(function () {
       console.log("Calculating route!")
       var path = buildPath(coordinates, coordinateNeighbors, startCoordinate, endCoordinate);
       console.log(path);
+      for (var i = 0; i < oldPath.length; i++) {
+        var coordinateID = "#" + oldPath[i];
+        $(coordinateID).children('img').remove();
+      };
       for (var i = 0; i < path.length; i++) {
         var coordinateID = "#" + path[i];
         if (path[i] !== startCoordinate && path[i] !== endCoordinate) {
@@ -96,6 +102,7 @@ $(function () {
           $(coordinateID).append(`<img class="blockImage" src="${imageRootPath}${pathMarker}" />`);
         }
       }
+      oldPath = path;
     }
   });
 });
@@ -107,7 +114,7 @@ function renderObstaclesAndHindrances(blockType, blockSizeX, blockSizeY, boxCoor
       if (checkBoxClass(i, j) !== 'startBlock' && checkBoxClass(i, j) != 'endBlock') {
         var fullCoordinateID = `#x${newCoordinateX}_y${newCoordinateY}`;
         if ($(fullCoordinateID).children().length != 0) {
-          cleanBox(fullCoordinateID);        
+          cleanBox(fullCoordinateID);
         }
         if (blockType === "Obstacle") {
           makeObstacle(newCoordinateY, newCoordinateX, coordinateNeighbors, coordinates);
@@ -255,7 +262,7 @@ function checkBoxClass(coordinateX, coordinateY) {
   return " ";
 }
 
-function initializeBoard(){
+function initializeBoard() {
   $('.box').children('img').remove();
   $('.box').removeClass('path obstacle startBlock endBlock hindrance');
   startSet = false;
