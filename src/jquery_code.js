@@ -1,10 +1,10 @@
 console.log('Here we are!');
-var imageRootPath = './pics/';
+const imageRootPath = './pics/';
 
-var obstacleImages = ['obstacle1.png', 'obstacle2.png', 'obstacle3.png', 'obstacle4.png'];
-var startImage = 'start.png';
-var endImage = 'end2.png';
-var hindranceImages = ['hindrance.png'];
+const obstacleImages = ['obstacle1.png', 'obstacle2.png', 'obstacle3.png', 'obstacle4.png'];
+const startImage = 'start.png';
+const endImage = 'end2.png';
+const hindranceImages = ['hindrance.png'];
 
 
 $(function () {
@@ -14,8 +14,8 @@ $(function () {
   var startCoordinate = "";
   var endCoordinate = "";
 
-  var boardXaxisLength = $('#board').attr('xaxislength');
-  var boardYaxisLength = $('#board').attr('yaxislength');
+  const boardXaxisLength = $('#board').attr('xaxislength');
+  const boardYaxisLength = $('#board').attr('yaxislength');
 
 
   console.log(`Board dimensions: ${boardXaxisLength} x ${boardYaxisLength}`);
@@ -67,7 +67,7 @@ $(function () {
 
   $("#showRoute").click(function (event) {
     if (startSet && endSet) {
-      var path = buildPath(coordinates, coordinateNeighbors, startCoordinate, endCoordinate);
+      var path = buildPath(coordinates, coordinateNeighbors, startPoint, endPoint);
       console.log("Calculating route!")
       console.log(path);
     }

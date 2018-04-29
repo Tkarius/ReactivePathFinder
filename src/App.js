@@ -4,15 +4,46 @@ import './App.css';
 import Rows from './Rows';
 import SideMenu from './SideMenu';
 import Form from './Form';
+var loadjs = require('loadjs');
 
 
 /*
 * We need to ask the board dimensions from the user and then populate the arrays. These are only for testing
 */
-const yAxis = ["y1", "y2", "y3", "y4", "y5", "y6", "y7", "y8", "y9", "y10"];
-const xAxis = ["x1", "x2", "x3", "x4", "x5", "x6", "x7", "x8", "x9", "x10"];
+var yAxis = ["y1", "y2", "y3", "y4", "y5", "y6", "y7", "y8", "y9", "y10"];
+var xAxis = ["x1", "x2", "x3", "x4", "x5", "x6", "x7", "x8", "x9", "x10"];
 
+function createArrays(newYAxis, newXAxis){
+  console.log('Creating new arrays!');
+  var tempX  = [];
+  var tempY = [];
+  for (var i = 1; i <= newYAxis; i++){
+    tempY.push(`y${i}`)
+  }
+  for (var i = 1; i <= newXAxis; i++){
+    tempX.push(`y${i}`)
+  }
+  yAxis = tempY;
+  xAxis = tempX;
+};
 class App extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      xAxis: 10,
+      yAxis: 10
+    };
+  };
+  componentWillMount(){
+    console.log("re-doing this shit!");
+    loadjs('./jquery_code.js');
+  }
+  updateAxis = (newYAxis, newXAxis) => {
+    createArrays(newXAxis, newXAxis);
+    this.setState({'xAxis': newXAxis});
+    this.setState({'yAxis': newYAxis});
+    loadjs('./jquery_code.js');
+  }
   render() {
     return (
       <div className="App">
@@ -26,7 +57,7 @@ class App extends Component {
         <div id ="showRouteDiv"><p className="button" id="showRoute">Calculate route!</p></div>
         <Rows yAxis = {yAxis} xAxis = {xAxis}/>
         <SideMenu />
-        <Form />
+        <Form updateAxis = {this.updateAxis}/>
       </div>
     );
   }
