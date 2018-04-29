@@ -20,18 +20,19 @@ class Form extends React.Component {
       this.setState({
         [name]: value
       });
-    }
+      console.log('changing state!' + name + value);
+    };
     
     //Function for handling the form sumbit
     handleSubmit(event) {
-      alert('X-Axis: ' + this.state.xAxis + ', Y-Axis: ' + this.state.yAxis);
+      //alert('X-Axis: ' + this.state.xAxis + ', Y-Axis: ' + this.state.yAxis);
+      this.props.updateAxis(this.state.yAxis, this.state.xAxis);
       event.preventDefault();
     }
 
     render() {
       return (
         <div id="form">
-          //HTML for the form
           <form onSubmit={this.handleSubmit}>
             <label>
               X-Axis:
