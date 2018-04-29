@@ -102,11 +102,10 @@ function renderObstaclesAndHindrances(blockType, blockSizeX, blockSizeY, boxCoor
   for (var i = 1; i <= blockSizeY; i++) {
     for (var j = 1; j <= blockSizeX; j++) {
       if (checkBoxClass(i, j) !== 'startBlock' && checkBoxClass(i, j) != 'endBlock') {
-
-        if ($(`#x${newCoordinateX}_y${newCoordinateY}`).children().length != 0) {
-          $(`#x${newCoordinateX}_y${newCoordinateY}.obstacle`).children().remove();
-          $(`#x${newCoordinateX}_y${newCoordinateY}.path`).children().remove();
-          $(`#x${newCoordinateX}_y${newCoordinateY}.hindrance`).children().remove();
+        var fullCoordinateID = `#x${newCoordinateX}_y${newCoordinateY}`;
+        if ($(fullCoordinateID).children().length != 0) {
+          cleanBox(fullCoordinateID);
+          
         }
         if (blockType === "Obstacle") {
           makeObstacle(newCoordinateY, newCoordinateX, coordinateNeighbors, coordinates);
@@ -208,6 +207,15 @@ function getCoordinateNeighbors(x, y, boardXaxisLength, boardYaxisLength) {
   }
   return neighbors;
 };
+
+function cleanBox(fullCoordinateID) {
+  $(`${fullCoordinateID}.obstacle`).children().remove();
+  $(`${fullCoordinateID}.path`).children().remove();
+  $(`${fullCoordinateID}.hindrance`).children().remove();
+  $(`${fullCoordinateID}`).removeClass('obstacle');
+  $(`${fullCoordinateID}`).removeClass('path');
+  $(`${fullCoordinateID}`).removeClass('hindrance');
+}
 
 function modifyDistanceForNeighbors(hindranceCoordinate, coordinateNeighbors) {
   for (coordinate in coordinateNeighbors) {
