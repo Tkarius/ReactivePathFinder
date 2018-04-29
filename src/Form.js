@@ -33,11 +33,11 @@ class Form extends React.Component {
 	  //Disables sumbit button when condition is not met
 	  this.validateForm(target.name, target.value);
     }
-    
+        
     //Function for handling the form sumbit
     handleSubmit(event) {
-      alert('X-Axis: ' + this.state.xAxis + ', Y-Axis: ' + this.state.yAxis);
-	  console.log(this.state.formValid)
+      //alert('X-Axis: ' + this.state.xAxis + ', Y-Axis: ' + this.state.yAxis);
+      this.props.updateAxis(this.state.yAxis, this.state.xAxis);
       event.preventDefault();
     }
 

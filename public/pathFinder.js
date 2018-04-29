@@ -30,8 +30,17 @@ var graph = {}
 var startPoint = '';
 var endPoint = '';
 
+// We'll store the resulting path in this global.
+var path = [];
+
 // we assume that graph has been built and that start- and endpoints have their values set.
-function dijkstra(graph, unvisited, startPoint, endPoint) {
+function dijkstra() {
+    console.log("Data structures inside the algorithm: ");
+    console.log(JSON.stringify(unvisited))
+    console.log(JSON.stringify(graph))
+    console.log(startPoint)
+    console.log(endPoint)
+    
     // set all distances to infinity in the beginning.
     for (node in graph) {
         previous[node] = undefined;
@@ -49,25 +58,27 @@ function dijkstra(graph, unvisited, startPoint, endPoint) {
 
         // CHECK IF WE ARE ALREADY AT THE END
         if (curNode === endPoint) {
-            // break out of while?
-            // doublecheck logic for this. if true, just do the following for if !=.
+            unvisited = [];
         }
-
-        for (neighbour in graph[node]) {
-            let newDistance = distance[curNode] + graph[neighbour][curNode];
-            if (newDistance < distance[neighbour]) {
-                distance[neighbour] = newDistance;
-                previous[neighbour] = curNode;
+        else {
+            for (neighbour in graph[curNode]) {
+                let newDistance = distance[curNode] + graph[neighbour][curNode];
+                if (newDistance < distance[neighbour]) {
+                    distance[neighbour] = newDistance;
+                    previous[neighbour] = curNode;
+                }
             }
         }
     }
+    //console.log("Debug: previous: " + JSON.stringify(previous));
+    //console.log("Debug: distance: " + JSON.stringify(distance));
     console.log("Dijkstra algorithm completed. Distance[] and previous[] data structures updated.")
 }
 
 // Returns the closest path from startPoint to endPoint.
 // Assumes that previous[] is set by the Dijkstra algorithm for the current points.
 function getPath() {
-    let path = [];
+    path = [];
     curNode = endPoint;
     while (curNode != startPoint) {
         // add current node as the first element of the path.
@@ -97,6 +108,13 @@ function buildPath(requestedNodes, requestedGraph, requestedStartPoint, requeste
     graph = requestedGraph;
     startPoint = requestedStartPoint;
     endPoint = requestedEndPoint;
+    distance = {};
+    previous = {};
+
+    console.log("Start point: " + startPoint);
+    console.log("End point: " + endPoint);
     dijkstra();
-    return getPath();
+    let shortestPath = getPath();
+    console.log("Resulting path: " + JSON.stringify(shortestPath));
+    return shortestPath;
 }
