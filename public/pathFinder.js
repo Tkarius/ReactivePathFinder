@@ -30,9 +30,8 @@ var graph = {}
 var startPoint = '';
 var endPoint = '';
 
-// mockup of the algorithm
 // we assume that graph has been built and that start- and endpoints have their values set.
-function Dijkstra(graph, startPoint, endPoint) {
+function dijkstra(graph, unvisited, startPoint, endPoint) {
     // set all distances to infinity in the beginning.
     for (node in graph) {
         previous[node] = undefined;
@@ -92,7 +91,12 @@ function minDist(dist) {
     return minDistNode;
 }
 
-// constructs unvisited[] and graph{}
-function buildGraph() {
-
+// driver function for the algorithm.
+function buildPath(requestedNodes, requestedGraph, requestedStartPoint, requestedEndPoint) {
+    unvisited = requestedNodes;
+    graph = requestedGraph;
+    startPoint = requestedStartPoint;
+    endPoint = requestedEndPoint;
+    dijkstra();
+    return getPath();
 }
