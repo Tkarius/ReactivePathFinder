@@ -15,6 +15,8 @@ var endCoordinate = "";
 var boardXaxisLength = $('#board').attr('xaxislength');
 var boardYaxisLength = $('#board').attr('yaxislength');
 
+var pathMarker = 'path.png';
+
 
 console.log(`Board dimensions: ${boardXaxisLength} x ${boardYaxisLength}`);
 //array of coordinates in form of coordinates = [x1y1, x2y1...]
@@ -100,7 +102,7 @@ $(function () {
 	  for (var i = 0; i < path.length; i++) {
 		  var coordinateID = "#" + path[i];
 		  $(coordinateID).addClass("path");
-		  //Add something to mark the path (css?)
+		  $(coordinateID).append(`<img class="blockImage" src="${imageRootPath}${pathMarker}" />`);
 	  }
     }
   });
