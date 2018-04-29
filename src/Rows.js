@@ -6,7 +6,7 @@ class Rows extends Component {
         var xAxis = this.props.xAxis;
 
         const rows = yAxis.map((row) =>
-            <div key={row.toString()} className={"boxrow " + row.toString()} >
+            <div key={row.toString()} className={"row " + row.toString()} >
                 <Boxes xAxis = {xAxis} yAxis = {row.toString()}/>
             </div>
         );
