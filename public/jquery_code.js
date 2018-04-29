@@ -19,10 +19,10 @@ var pathMarker = 'path.png';
 
 
 console.log(`Board dimensions: ${boardXaxisLength} x ${boardYaxisLength}`);
-//array of coordinates in form of coordinates = [x1y1, x2y1...]
+//array of coordinates in form of coordinates = [x1_y1, x2_y1...]
 var coordinates;
 
-/*object of coordinates and their valid neighbors in form of {x1y1: {x2y1, x1y2...}...}
+/*object of coordinates and their valid neighbors in form of {x1_y1: {x2_y1, x1_y2...}...}
 * only valid neighbors are listed and as obstacles are added to the board the invalid coordinates
 * are removed.
 */
@@ -36,7 +36,7 @@ var blockSizeY = 0;
 
 $(function () {
   console.log("here again!")
-  initializeBoard();
+  initializeBoard(); // this is used to empty the board after board dimensions have been reset.
   $(".box").unbind('click').click(function (event) {
     console.log("Status: end: " + endSet + " start: " + startSet)
     var blockClass = "";
@@ -163,7 +163,7 @@ function getAllBoxCoordinates(boardXaxisLength, boardYaxisLength) {
       var boxClass = checkBoxClass(i, j);
       if (boxClass != "obstacle") {
         let coordinate = `x${i}_y${j}`;
-        if (boxClass === 'startBlock') {
+        if (boxClass === 'startBlock') { //if we do not empty the board at dimension reset we need to find placed start/end blocks
           console.log("Start block found at: " + coordinate);
           startSet = true;
           startCoordinate = coordinate;
@@ -182,12 +182,8 @@ function getAllBoxCoordinates(boardXaxisLength, boardYaxisLength) {
 
 /**
  * Finds all neighbors for a given coordinate and returns an object of valid neighbors. This method
- * is called at board initialization and assumes all cells that are within board boundaris are valid.
+ * is called at board initialization and assumes all cells that are within board boundaries are valid.
  * 
- * @param {*} x 
- * @param {*} y 
- * @param {*} boardXaxisLength 
- * @param {*} boardYaxisLength 
  */
 function getCoordinateNeighbors(x, y, boardXaxisLength, boardYaxisLength) {
   var neighbors = {};
@@ -229,8 +225,6 @@ function modifyDistanceForNeighbors(hindranceCoordinate, coordinateNeighbors) {
 /**
  * Removes the obstacle coordinate from coordinate neighbors list as well as removes the
  * obstacle coordinate from valid neighbors from other coordinates.
- * @param {*} obstacleCoordinate 
- * @param {*} coordinateNeighbors 
  */
 function removeFromValidNeigbors(obstacleCoordinate, coordinateNeighbors) {
   delete coordinateNeighbors[obstacleCoordinate];
@@ -245,7 +239,6 @@ function removeFromValidNeigbors(obstacleCoordinate, coordinateNeighbors) {
 function removeFromCoordinateList(coordinateToRemove, coordinates) {
   var index = coordinates.indexOf(coordinateToRemove);
   if (index !== -1) {
-    console.log("removing coordinate from list index: " + index);
     coordinates.splice(index, 1);
   }
   return coordinates;
