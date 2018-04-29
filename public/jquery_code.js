@@ -95,7 +95,7 @@ $(function () {
   });
 
   $("#showRoute").click(function () {
-    if (startSet && endSet) {
+    if (startSet && endSet) {	  
       console.log("Calculating route!")
       var path = buildPath(coordinates, coordinateNeighbors, startCoordinate, endCoordinate);
       console.log(path);
