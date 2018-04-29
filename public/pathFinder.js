@@ -3,7 +3,7 @@
 // Our graphs are relatively simple and this shouldn't have too much of an effect on processing
 // times.
 
-// a queue of all the nodes in the graph. probably objects with coordinates.
+// an array of all the nodes in the graph.
 var unvisited = [];
 
 // distances from nodes to the end node are stored here.
@@ -23,7 +23,6 @@ var previous = {}
 //}
 // so that each graph entry includes information about all available paths and their weighs from
 // that particular node to the adjacent node.
-// For obstacles, we just need to remove the possible routes.
 var graph = {}
 
 // Starting and ending points for our path.
@@ -108,7 +107,6 @@ function buildPath(requestedNodes, requestedGraph, requestedStartPoint, requeste
     endPoint = requestedEndPoint;
     distance = {};
     previous = {};
-    console.log("buildpath Nodet: " + JSON.stringify(requestedNodes));
     // call dijkstra algorithm to build the distance mapping
     dijkstra();
     // call getPath() to build the optimal path and return it as an array
