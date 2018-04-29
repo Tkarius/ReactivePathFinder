@@ -15,6 +15,8 @@ var endCoordinate = "";
 var boardXaxisLength = $('#board').attr('xaxislength');
 var boardYaxisLength = $('#board').attr('yaxislength');
 
+var pathMarker = 'path.png';
+
 
 console.log(`Board dimensions: ${boardXaxisLength} x ${boardYaxisLength}`);
 //array of coordinates in form of coordinates = [x1y1, x2y1...]
@@ -35,7 +37,7 @@ var blockSizeY = 0;
 $(function () {
   console.log("here again!")
   $(".box").bind("click", function (event) {
-    console.log("Status: end: " +endSet + " start: " + startSet)
+    console.log("Status: end: " + endSet + " start: " + startSet)
     var blockClass = "";
     var boxCoordinateX = $(this).attr("id").split("_")[0].substring(1);
     var boxCoordinateY = $(this).attr("id").split("_")[1].substring(1);
@@ -44,45 +46,32 @@ $(function () {
     if (blockType === "Start") {
       if (!startSet) {
         startCoordinate = `x${boxCoordinateX}_y${boxCoordinateY}`;
-
         $(fullCoordinateID).append(`<img class="blockImage" src="${imageRootPath}${startImage}" />`);
-        $(fullCoordinateID).bind("click", function () {
-          console.log("Wohoo!");
-          if (startSet) {
-            $(fullCoordinateID).removeClass(`startBlock`);
-            $(fullCoordinateID).children('img').remove();
-            startSet = false;
-            startCoordinate = "";
-            //$(fullCoordinateID).unbind(this);
-          }
-        });
-        blockClass = "startBlock";
+        $(this).addClass("startBlock");
         startSet = true;
+      } else if (startSet && `x${boxCoordinateX}_y${boxCoordinateY}` === startCoordinate){
+        $(fullCoordinateID).removeClass(`startBlock`);
+        $(fullCoordinateID).children('img').remove();
+        startSet = false;
+        startCoordinate = "";
       }
     }
     else if (blockType === "End") {
       if (!endSet) {
         endCoordinate = `x${boxCoordinateX}_y${boxCoordinateY}`;
         $(fullCoordinateID).append(`<img class="blockImage" src="${imageRootPath}${endImage}" />`);
-        $(fullCoordinateID).bind("click", function () {
-          console.log("Wohoo!");
-          if (startSet) {
-            $(fullCoordinateID).removeClass(`endBlock`);
-            $(fullCoordinateID).children('img').remove();
-            endSet = false;
-            endCoordinate = "";
-            //$(fullCoordinateID).unbind(this);
-          }
-        });
-        blockClass = "endBlock";
+        $(this).addClass("endBlock");
         endSet = true;
+      } else if (endSet && `x${boxCoordinateX}_y${boxCoordinateY}` === endCoordinate){
+        $(fullCoordinateID).removeClass(`endBlock`);
+        $(fullCoordinateID).children('img').remove();
+        endSet = false;
+        endCoordinate = "";
       }
     }
     else if (blockType === "Obstacle" || blockType === "Hindrance") {
       renderObstaclesAndHindrances(blockType, blockSizeX, blockSizeY, boxCoordinateX, boxCoordinateY, coordinateNeighbors, coordinates);
     }
-    $(this).addClass(blockClass);
-    //reduceAvailableAmount(blockName);
   });
 
   $(".chooseButton").click(function (event) {
@@ -97,20 +86,27 @@ $(function () {
       console.log("Calculating route!")
       var path = buildPath(coordinates, coordinateNeighbors, startCoordinate, endCoordinate);
       console.log(path);
-	  for (var i = 0; i < path.length; i++) {
-		  var coordinateID = "#" + path[i];
-		  $(coordinateID).addClass("path");
-		  //Add something to mark the path (css?)
-	  }
+      for (var i = 0; i < path.length; i++) {
+        var coordinateID = "#" + path[i];
+        if (path[i] !== startCoordinate && path[i] !== endCoordinate) {
+          $(coordinateID).addClass("path");
+          $(coordinateID).append(`<img class="blockImage" src="${imageRootPath}${pathMarker}" />`);
+        }
+      }
     }
   });
 });
 function renderObstaclesAndHindrances(blockType, blockSizeX, blockSizeY, boxCoordinateX, boxCoordinateY, coordinateNeighbors, coordinates) {
   var newCoordinateY = boxCoordinateY;
   var newCoordinateX = boxCoordinateX;
-  for (var i = 0; i < blockSizeY; i++) {
-    for (var j = 0; j < blockSizeX; j++) {
-      if ($(`#x${newCoordinateX}_y${newCoordinateY}`).children().length === 0) {
+  for (var i = 1; i <= blockSizeY; i++) {
+    for (var j = 1; j <= blockSizeX; j++) {
+      if (checkBoxClass(i, j) !== 'startBlock' && checkBoxClass(i, j) != 'endBlock') {
+        var fullCoordinateID = `#x${newCoordinateX}_y${newCoordinateY}`;
+        if ($(fullCoordinateID).children().length != 0) {
+          cleanBox(fullCoordinateID);
+          
+        }
         if (blockType === "Obstacle") {
           makeObstacle(newCoordinateY, newCoordinateX, coordinateNeighbors, coordinates);
         } else {
@@ -202,7 +198,7 @@ function getCoordinateNeighbors(x, y, boardXaxisLength, boardYaxisLength) {
           var coordinate = `x${i}_y${j}`;
           var weight = 1;
           if (boxClass === 'hindrance') {
-            weight = 1.5;
+            weight = 3;
           }
           neighbors[coordinate] = weight;
         }
@@ -212,10 +208,19 @@ function getCoordinateNeighbors(x, y, boardXaxisLength, boardYaxisLength) {
   return neighbors;
 };
 
+function cleanBox(fullCoordinateID) {
+  $(`${fullCoordinateID}.obstacle`).children().remove();
+  $(`${fullCoordinateID}.path`).children().remove();
+  $(`${fullCoordinateID}.hindrance`).children().remove();
+  $(`${fullCoordinateID}`).removeClass('obstacle');
+  $(`${fullCoordinateID}`).removeClass('path');
+  $(`${fullCoordinateID}`).removeClass('hindrance');
+}
+
 function modifyDistanceForNeighbors(hindranceCoordinate, coordinateNeighbors) {
   for (coordinate in coordinateNeighbors) {
     if (coordinateNeighbors[coordinate][hindranceCoordinate] !== undefined) {
-      coordinateNeighbors[coordinate][hindranceCoordinate] = 1.5;
+      coordinateNeighbors[coordinate][hindranceCoordinate] = 3;
     }
   }
 };
