@@ -34,6 +34,8 @@ var blockType = "";
 var blockSizeX = 0;
 var blockSizeY = 0;
 
+var oldPath = [];
+
 $(function () {
   console.log("here again!")
   $(".box").bind("click", function (event) {
@@ -80,12 +82,17 @@ $(function () {
     blockSizeX = $(this).attr("sizex");
     blockSizeY = $(this).attr("sizey");
   });
-
+	
   $("#showRoute").click(function () {
-    if (startSet && endSet) {	  
-      console.log("Calculating route!")
-      var path = buildPath(coordinates, coordinateNeighbors, startCoordinate, endCoordinate);
-      console.log(path);
+      if (startSet && endSet) {	
+		console.log("Calculating route!")
+      	var path = buildPath(coordinates, coordinateNeighbors, startCoordinate, endCoordinate);
+      	console.log(path);
+	  	for (var i = 0; i < oldPath.length; i++) {
+			var coordinateID = "#" + oldPath[i];
+			console.log('moi hoi');
+	  		$(coordinateID).children('img').remove();
+	  	};
       for (var i = 0; i < path.length; i++) {
         var coordinateID = "#" + path[i];
         if (path[i] !== startCoordinate && path[i] !== endCoordinate) {
@@ -93,6 +100,7 @@ $(function () {
           $(coordinateID).append(`<img class="blockImage" src="${imageRootPath}${pathMarker}" />`);
         }
       }
+	  oldPath = path;
     }
   });
 });
