@@ -6,50 +6,56 @@ var startImage = 'start.png';
 var endImage = 'end2.png';
 var hindranceImages = ['hindrance.png'];
 
+var startSet = false;
+var endSet = false;
+
+var startCoordinate = "";
+var endCoordinate = "";
+
+var boardXaxisLength = $('#board').attr('xaxislength');
+var boardYaxisLength = $('#board').attr('yaxislength');
+
+
+console.log(`Board dimensions: ${boardXaxisLength} x ${boardYaxisLength}`);
+//array of coordinates in form of coordinates = [x1y1, x2y1...]
+var coordinates = getAllBoxCoordinates(boardXaxisLength, boardYaxisLength);
+
+/*object of coordinates and their valid neighbors in form of {x1y1: {x2y1, x1y2...}...}
+* only valid neighbors are listed and as obstacles are added to the board the invalid coordinates
+* are removed.
+*/
+var coordinateNeighbors = getAllBoxCoordinatesWNeighbors(boardXaxisLength, boardYaxisLength);;
+
+//Information about the currently active block mode. We might want to encapsulate these to an object
+var blockName = "";
+var blockType = "";
+var blockSizeX = 0;
+var blockSizeY = 0;
 
 $(function () {
-  var startSet = false;
-  var endSet = false;
-
-  var startCoordinate = "";
-  var endCoordinate = "";
-
-  var boardXaxisLength = $('#board').attr('xaxislength');
-  var boardYaxisLength = $('#board').attr('yaxislength');
-
-
-  console.log(`Board dimensions: ${boardXaxisLength} x ${boardYaxisLength}`);
-  //array of coordinates in form of coordinates = [x1y1, x2y1...]
-  var coordinates = getAllBoxCoordinates(boardXaxisLength, boardYaxisLength);
-
-  /*object of coordinates and their valid neighbors in form of {x1y1: {x2y1, x1y2...}...}
-  * only valid neighbors are listed and as obstacles are added to the board the invalid coordinates
-  * are removed.
-  */
-  var coordinateNeighbors = getAllBoxCoordinatesWNeighbors(boardXaxisLength, boardYaxisLength);;
-
-  //Information about the currently active block mode. We might want to encapsulate these to an object
-  var blockName = "";
-  var blockType = "";
-  var blockSizeX = 0;
-  var blockSizeY = 0;
-
+  console.log("here again!")
   $(".box").click(function (event) {
     var blockClass = "";
     var boxCoordinateX = $(this).attr("id").split("_")[0].substring(1);
     var boxCoordinateY = $(this).attr("id").split("_")[1].substring(1);
     var fullCoordinateID = `#x${boxCoordinateX}_y${boxCoordinateY}`;
+    console.log("Clicked on board! " + fullCoordinateID);
     if (blockType === "Start" && startSet === false) {
-      startCoordinate = `x${boxCoordinateX}y${boxCoordinateY}`;
-      $(fullCoordinateID).append(`<img class="blockImage" src="${imageRootPath}${startImage}" />`);
-      blockClass = "startBlock";
-      startSet = true;
+      if ($(fullCoordinateID).children().length === 0) {
+        startCoordinate = `x${boxCoordinateX}y${boxCoordinateY}`;
+
+        $(fullCoordinateID).append(`<img class="blockImage" src="${imageRootPath}${startImage}" />`);
+        blockClass = "startBlock";
+        startSet = true;
+      }
     }
     else if (blockType === "End" && endSet === false) {
-      endCoordinate = `x${boxCoordinateX}y${boxCoordinateY}`;
-      $(fullCoordinateID).append(`<img class="blockImage" src="${imageRootPath}${endImage}" />`);
-      blockClass = "endBlock";
-      endSet = true;
+      if ($(fullCoordinateID).children().length === 0) {
+        endCoordinate = `x${boxCoordinateX}y${boxCoordinateY}`;
+        $(fullCoordinateID).append(`<img class="blockImage" src="${imageRootPath}${endImage}" />`);
+        blockClass = "endBlock";
+        endSet = true;
+      }
     }
     else if (blockType === "Obstacle" || blockType === "Hindrance") {
       renderObstaclesAndHindrances(blockType, blockSizeX, blockSizeY, boxCoordinateX, boxCoordinateY, coordinateNeighbors, coordinates);
@@ -73,18 +79,19 @@ $(function () {
     }
   });
 });
-
 function renderObstaclesAndHindrances(blockType, blockSizeX, blockSizeY, boxCoordinateX, boxCoordinateY, coordinateNeighbors, coordinates) {
   var newCoordinateY = boxCoordinateY;
   var newCoordinateX = boxCoordinateX;
   for (var i = 0; i < blockSizeY; i++) {
     for (var j = 0; j < blockSizeX; j++) {
-      if (blockType === "Obstacle") {
-        makeObstacle(newCoordinateY, newCoordinateX, coordinateNeighbors, coordinates);
-      } else {
-        makeHindrance(newCoordinateY, newCoordinateX, coordinateNeighbors, coordinates);
+      if ($(`#x${newCoordinateX}_y${newCoordinateY}`).children().length === 0) {
+        if (blockType === "Obstacle") {
+          makeObstacle(newCoordinateY, newCoordinateX, coordinateNeighbors, coordinates);
+        } else {
+          makeHindrance(newCoordinateY, newCoordinateX, coordinateNeighbors, coordinates);
+        }
+        newCoordinateX++;
       }
-      newCoordinateX++;
     }
     console.log(coordinateNeighbors);
     newCoordinateX = boxCoordinateX;
@@ -95,9 +102,10 @@ function renderObstaclesAndHindrances(blockType, blockSizeX, blockSizeY, boxCoor
 
 function makeObstacle(coordinateY, coordinateX, coordinateNeighbors, coordinates) {
   var coordinate = `x${coordinateX}y${coordinateY}`;
-  var fullCoordinateID = `#x${coordinateX}_y${coordinateY}`
+  var fullCoordinateID = `#x${coordinateX}_y${coordinateY}`;
   $(fullCoordinateID).addClass("obstacle");
-  $(fullCoordinateID).append(`<img class="blockImage" src="${imageRootPath}${obstacleImages[Math.floor(Math.random() * obstacleImages.length)]}" />`)
+  $(fullCoordinateID).append(`<img class="blockImage" src="${imageRootPath}${obstacleImages[Math.floor(Math.random() * obstacleImages.length)]}" alt="obstacle"/>`)
+  console.log(`${fullCoordinateID}: ${imageRootPath}${obstacleImages[Math.floor(Math.random() * obstacleImages.length)]}`);
   removeFromValidNeigbors(coordinate, coordinateNeighbors);
   removeFromCoordinateList(coordinate, coordinates);
 }
@@ -116,9 +124,11 @@ function getAllBoxCoordinatesWNeighbors(boardXaxisLength, boardYaxisLength) {
   var coordinates = {};
   for (var i = 1; i <= boardXaxisLength; i++) {
     for (var j = 1; j <= boardYaxisLength; j++) {
-      let coordinate = `x${i}y${j}`;
-      let coordinateNeighbors = getCoordinateNeighbors(i, j, boardXaxisLength, boardYaxisLength);
-      coordinates[coordinate] = coordinateNeighbors;
+      if (checkBoxClass(i, j) != "obstacle") {
+        let coordinate = `x${i}y${j}`;
+        let coordinateNeighbors = getCoordinateNeighbors(i, j, boardXaxisLength, boardYaxisLength);
+        coordinates[coordinate] = coordinateNeighbors;
+      }
     }
   }
   return coordinates;
@@ -128,8 +138,21 @@ function getAllBoxCoordinates(boardXaxisLength, boardYaxisLength) {
   var coordinates = [];
   for (var i = 1; i <= boardXaxisLength; i++) {
     for (var j = 1; j <= boardYaxisLength; j++) {
-      let coordinate = `x${i}y${j}`;
-      coordinates.push(coordinate);
+      var boxClass = checkBoxClass(i, j);
+      if (boxClass != "obstacle") {
+        let coordinate = `x${i}y${j}`;
+        if (boxClass === 'startBlock') {
+          console.log("Start block found at: " + coordinate);
+          startSet = true;
+          startCoordinate = coordinate;
+        }
+        else if (boxClass === 'endBlock'){
+          console.log("End block found at: " + coordinate);
+          endSet = true;
+          endCoordinate = coordinate;
+        }
+        coordinates.push(coordinate);
+      }
     }
   }
   return coordinates;
@@ -149,8 +172,15 @@ function getCoordinateNeighbors(x, y, boardXaxisLength, boardYaxisLength) {
   for (var i = Math.max(x - 1, 1); i <= Math.min(x + 1, boardXaxisLength); i++) {
     for (var j = Math.max(y - 1, 1); j <= Math.min(y + 1, boardYaxisLength); j++) {
       if ((i !== x || j !== y) && (i === x || j === y)) { //we need to both prevent the cell from being marked as it's own neighbor as well as prevent moving from corner to corner
-        var coordinate = `x${i}y${j}`;
-        neighbors[coordinate] = 1;
+        var boxClass = checkBoxClass(i, j);
+        if (boxClass != "obstacle") {
+          var coordinate = `x${i}y${j}`;
+          var weight = 1;
+          if (boxClass === 'hindrance') {
+            weight = 1.5;
+          }
+          neighbors[coordinate] = weight;
+        }
       }
     }
   }
@@ -187,4 +217,14 @@ function removeFromCoordinateList(coordinateToRemove, coordinates) {
     coordinates.splice(index, 1);
   }
   return coordinates;
+}
+
+function checkBoxClass(coordinateX, coordinateY) {
+  var fullCoordinateID = `#x${coordinateX}_y${coordinateY}`
+  var classes = $(fullCoordinateID).attr('class').split(/\s+/);
+  //console.log(classes);
+  if (classes.length > 1) {
+    return classes[1];
+  }
+  return " ";
 }

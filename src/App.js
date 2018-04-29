@@ -21,7 +21,7 @@ function createArrays(newYAxis, newXAxis){
     tempY.push(`y${i}`)
   }
   for (var i = 1; i <= newXAxis; i++){
-    tempX.push(`y${i}`)
+    tempX.push(`x${i}`)
   }
   yAxis = tempY;
   xAxis = tempX;
