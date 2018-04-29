@@ -91,7 +91,7 @@ $(function () {
 		console.log("Calculating route!")
       	var path = buildPath(coordinates, coordinateNeighbors, startCoordinate, endCoordinate);
       	console.log(path);
-	  	for (var i = 0; i < oldPath.length; i++) {
+	  	for (var i = 1; i < oldPath.length-1; i++) {
 			var coordinateID = "#" + oldPath[i];
 	  		$(coordinateID).children('img').remove();
 	  	};
@@ -100,9 +100,9 @@ $(function () {
         if (path[i] !== startCoordinate && path[i] !== endCoordinate) {
           $(coordinateID).addClass("path");
           $(coordinateID).append(`<img class="blockImage" src="${imageRootPath}${pathMarker}" />`);
+		  oldPath = path;
         }
       }
-	  oldPath = path;
     }
   });
 });
