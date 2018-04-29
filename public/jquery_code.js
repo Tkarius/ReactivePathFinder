@@ -76,6 +76,11 @@ $(function () {
       var path = buildPath(coordinates, coordinateNeighbors, startCoordinate, endCoordinate);
       console.log("Calculating route!")
       console.log(path);
+	  for (var i = 0; i < path.length; i++) {
+		  var coordinateID = "#" + path[i];
+		  $(coordinateID).addClass("path");
+		  //Add something to mark the path (css?)
+	  }
     }
   });
 });
